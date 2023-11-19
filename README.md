@@ -7,6 +7,6 @@ You must watch the briefing video and read through the manual to engage in the d
 
 Section: [Insert your lab section]
 
-MacID: [Insert your macID here]
+MacID: arorah7
 
 StudentID: [Insert your numerical student ID here]
