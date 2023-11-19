@@ -9,4 +9,4 @@ Section: L07 & L07
 
 MacID: arorah7 & adiebk
 
-StudentID: [Insert your numerical student ID here]
+StudentID: 400 & 400449045
