@@ -2,7 +2,7 @@
 
 GameMechs::GameMechs()
 {
-
+    int x = 0;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
