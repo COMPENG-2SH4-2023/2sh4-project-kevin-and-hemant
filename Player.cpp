@@ -70,7 +70,7 @@ void Player::movePlayer()
 
         case(RIGHT):
             playerPos.x++;
-            if(playerPos.x >= mainGameMechsRef->getBoardSizeX() - 1) // Wraparound logic
+            if(playerPos.x >= mainGameMechsRef->getBoardSizeX()) // Wraparound logic
                 playerPos.x = 1;
             break;
     }
