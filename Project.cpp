@@ -56,12 +56,13 @@ void GetInput(void)
 
 void RunLogic(void)
 {
-    myPlayer->updatePlayerDir();
-    myPlayer->movePlayer();
     if(myGM->getInput() == 32)
     {
         myGM->setExitTrue();
     }
+
+    myPlayer->updatePlayerDir();
+    myPlayer->movePlayer();
 }
 
 void DrawScreen(void)
