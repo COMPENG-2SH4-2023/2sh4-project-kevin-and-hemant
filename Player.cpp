@@ -6,18 +6,34 @@ Player::Player(GameMechs* thisGMRef)
     myDir = STOP;
 
     // more actions to be included
-    playerPos.setObjPos(mainGameMechsRef->getBoardSizeX() / 2,mainGameMechsRef->getBoardSizeY() / 2,'@');
+    objPos tempPos;
+    tempPos.setObjPos(mainGameMechsRef->getBoardSizeX() / 2,
+                      mainGameMechsRef->getBoardSizeY() / 2,
+                      '@');
+    playerPosList = new objPosArrayList;
+    playerPosList->insertHead(tempPos);
+
+    // For debugging purpose insert 4 more segemts
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
+    playerPosList->insertHead(tempPos);
 }
 
 Player::~Player()
 {
     // delete any heap members here
+    delete playerPosList;
 }
 
-void Player::getPlayerPos(objPos &returnPos)
+objPosArrayList* Player::getPlayerPosList()
 {
-    returnPos.setObjPos(playerPos.x, playerPos.y, playerPos.symbol);
     // return the reference to the playerPos arrray list
+    return playerPosList;
 }
 
 void Player::updatePlayerDir()
@@ -49,30 +65,37 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
+    objPos currentHead; 
+    playerPosList->getHeadElement(currentHead);
+
     switch(myDir){
         case(UP):
-            playerPos.y--;
-            if(playerPos.y <= 0) // Wraparound logic
-                playerPos.y = mainGameMechsRef->getBoardSizeY() - 1;
+            currentHead.y--;
+            if(currentHead.y <= 0) // Wraparound logic
+                currentHead.y = mainGameMechsRef->getBoardSizeY() - 1;
             break;
 
         case(DOWN):
-            playerPos.y++;
-            if(playerPos.y >= mainGameMechsRef->getBoardSizeY()){ // Wraparound logic
-                playerPos.y = 1;}
+            currentHead.y++;
+            if(currentHead.y >= mainGameMechsRef->getBoardSizeY()){ // Wraparound logic
+                currentHead.y = 1;}
             break;
 
         case(LEFT):
-            playerPos.x--;
-            if(playerPos.x <= 0) // Wraparound logic
-                playerPos.x = mainGameMechsRef->getBoardSizeX() - 1;
+            currentHead.x--;
+            if(currentHead.x <= 0) // Wraparound logic
+                currentHead.x = mainGameMechsRef->getBoardSizeX() - 1;
             break;
 
         case(RIGHT):
-            playerPos.x++;
-            if(playerPos.x >= mainGameMechsRef->getBoardSizeX()) // Wraparound logic
-                playerPos.x = 1;
+            currentHead.x++;
+            if(currentHead.x >= mainGameMechsRef->getBoardSizeX()) // Wraparound logic
+                currentHead.x = 1;
             break;
     }
+    // New current Head should be inserted in to the head of the list
+    // then remove the tail
+    playerPosList->insertHead(currentHead);
+    playerPosList->removeTail();
 }
 
