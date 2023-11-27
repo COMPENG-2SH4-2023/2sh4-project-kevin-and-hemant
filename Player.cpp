@@ -1,6 +1,5 @@
 #include "Player.h"
 
-
 Player::Player(GameMechs* thisGMRef)
 {
     mainGameMechsRef = thisGMRef;
@@ -54,25 +53,25 @@ void Player::movePlayer()
         case(UP):
             playerPos.y--;
             if(playerPos.y <= 0) // Wraparound logic
-                playerPos.y = mainGameMechsRef->getBoardSizeY() - 2;
+                playerPos.y = mainGameMechsRef->getBoardSizeY() - 1;
             break;
 
         case(DOWN):
             playerPos.y++;
-            if(playerPos.y >= mainGameMechsRef->getBoardSizeY() - 1); // Wraparound logic
-                playerPos.y = 1;
+            if(playerPos.y >= mainGameMechsRef->getBoardSizeY()){ // Wraparound logic
+                playerPos.y = 1;}
             break;
 
         case(LEFT):
             playerPos.x--;
             if(playerPos.x <= 0) // Wraparound logic
-                playerPos.x = mainGameMechsRef->getBoardSizeX() - 2;
+                playerPos.x = mainGameMechsRef->getBoardSizeX() - 1;
             break;
 
         case(RIGHT):
             playerPos.x++;
-            if(playerPos.y >= mainGameMechsRef->getBoardSizeX() - 1) // Wraparound logic
-                playerPos.y = 1;
+            if(playerPos.x >= mainGameMechsRef->getBoardSizeX() - 1) // Wraparound logic
+                playerPos.x = 1;
             break;
     }
 }
