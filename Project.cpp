@@ -3,6 +3,7 @@
 #include "objPos.h"
 #include "GameMechs.h"
 #include "Player.h"
+#include "Food.h"
 
 
 using namespace std;
@@ -11,6 +12,7 @@ using namespace std;
 
 GameMechs* myGM;
 Player* myPlayer;
+Food* myFood;
 
 void Initialize(void);
 void GetInput(void);
@@ -46,23 +48,23 @@ void Initialize(void)
 
     myGM = new GameMechs(26,13); //creates board size 26x13
     myPlayer = new Player(myGM);
-
+    myFood = new Food();
+    // Think about when to generate the new food... 
+    // Think about whether you want to set up a debug key to call the food generation routine for verification
+    // remember, generateFood() requires player reference. You will need to provide it AFTER player object is instantiated.
 }
 
 void GetInput(void)
 {
-    myGM->setInput(myGM->getInput());
+    myGM->getInput();
 }
 
 void RunLogic(void)
 {
-    if(myGM->getInput() == 32)
-    {
-        myGM->setExitTrue();
-    }
 
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
+    myGM->clearInput();
 }
 
 void DrawScreen(void)
@@ -90,6 +92,7 @@ void DrawScreen(void)
         }
         MacUILib_printf("\n");
     }
+    MacUILib_printf("Score: %d\n", myGM->getScore());
     MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPos.x, tempPos.y, tempPos.symbol);
 }
 
@@ -104,4 +107,9 @@ void CleanUp(void)
     MacUILib_clearScreen();    
   
     MacUILib_uninit();
+    
+    //remove heap instances
+    delete myGM;
+    delete myPlayer;
+    delete myFood;
 }
