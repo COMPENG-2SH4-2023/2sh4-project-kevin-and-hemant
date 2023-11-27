@@ -19,11 +19,9 @@ class Food
     private:
     objPos foodPos;
     GameMechs* foodGameMechsRef;
-    int rangex[numFoods];
-    int rangey[numFoods];
         
     public:
-    Food();
+    Food(GameMechs* foodGMRef);
     ~Food();
     void generateFood(objPos blockOff);
     void getFoodPos(objPos &returnPos);

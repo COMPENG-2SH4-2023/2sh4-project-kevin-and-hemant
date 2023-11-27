@@ -48,7 +48,7 @@ void Initialize(void)
 
     myGM = new GameMechs(26,13); //creates board size 26x13
     myPlayer = new Player(myGM);
-    myFood = new Food();
+    myFood = new Food(myGM);
     // Think about when to generate the new food... 
     // Think about whether you want to set up a debug key to call the food generation routine for verification
     // remember, "myFood->generateFood(objPos blockOff)" requires player reference. You will need to provide it AFTER player object is instantiated.
@@ -56,23 +56,36 @@ void Initialize(void)
 
 void GetInput(void)
 {
-    myGM->getInput();
+    if(MacUILib_hasChar() == 1)
+    {
+        char input = MacUILib_getChar();
+        if(input == 32)
+        {
+            myGM->setExitTrue();
+        }
+        myGM->setInput(input);
+    }
 }
 
 void RunLogic(void)
 {
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
-    myGM->clearInput();
+    //clear input was here (moved to last line in draw for now)
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen();    
     
-    objPos tempPos;
-    objPos tempFood;
+    objPos tempPos; //creating a tempPos object for player
+    objPos tempFood; //creating tempFood object for the food
     myPlayer->getPlayerPos(tempPos);
+    //for testing click 'k' to generate a random food
+    if(myGM->getInput() == 'k')
+    {
+        myFood->generateFood(tempPos);
+    }
     myFood->getFoodPos(tempFood);
 
     for(int i = 0; i <= myGM->getBoardSizeY(); i++)
@@ -99,9 +112,10 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
     MacUILib_printf("Score: %d\n", myGM->getScore());
-    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPos.x, tempPos.y, tempPos.symbol);
+    MacUILib_printf("Board size: %dx%d\nPlayer Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempPos.x, tempPos.y, tempPos.symbol);
     
     MacUILib_printf("Food: <%d,%d> + %c", tempFood.x, tempFood.y, tempFood.symbol);
+    myGM->clearInput();
 }
 
 void LoopDelay(void)

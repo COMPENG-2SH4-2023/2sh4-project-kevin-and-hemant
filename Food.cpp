@@ -1,15 +1,10 @@
 #include "Food.h"
 #define foodChar '?'
 
-Food::Food()
+Food::Food(GameMechs* foodGMRef)
 {
-    //foodGameMechsRef->
-    for(int i = 0; i < numFoods; i++)
-    {
-        rangex[i] = {-1};
-        rangey[i] = {-1};
-    }
-    foodPos.setObjPos(rangex[0],rangey[0],foodChar);
+    foodGameMechsRef = foodGMRef;
+    foodPos.setObjPos(-1,-1,foodChar);
 }
 
 Food::~Food()
@@ -23,32 +18,21 @@ void Food::generateFood(objPos blockOff)
 // remember, in objPos class you have an IsPosEqual() method. Use this instead of comparing element-by-element
 // for yoru convenience.
     srand(time(NULL));
-    int x, y;
-
-    for(int i = 0; i < numFoods; i++)
+    
+    while(true)
     {
-        while(rangex[i] == 0 || rangey[i] == 0)
+        int x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
+        int y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
+        if(!foodPos.isPosEqual(&blockOff))
         {
-            x = (rand() % foodGameMechsRef->getBoardSizeX()) + 1;
-            y = (rand() % foodGameMechsRef->getBoardSizeY()) + 1;
-            for(int j = 0; j <= i; j++)
-            {
-                if(rangex[j] != x && rangey[j] != y && !foodPos.isPosEqual(&blockOff))
-                {
-                    rangex[i] = x;
-                    rangey[i] = y;
-                }
-            }
+            foodPos.setObjPos(x,y,foodChar);
+            break;
         }
     }
-
-
 }
+
 
 void Food::getFoodPos(objPos &returnPos)
 {
-    //for(int i = 0; i < numFoods; i++)
-    {
-        returnPos.setObjPos(rangex[0], rangey[0], foodChar);
-    }
+    returnPos.setObjPos(foodPos);
 }

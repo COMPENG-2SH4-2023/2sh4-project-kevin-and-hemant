@@ -34,14 +34,6 @@ bool GameMechs::getExitFlagStatus()
 
 char GameMechs::getInput()
 {
-    if(MacUILib_hasChar() == 1)
-    {
-        input = MacUILib_getChar();
-        if(input == 32)
-        {
-            setExitTrue();
-        }
-    }
     return input;
 }
 
