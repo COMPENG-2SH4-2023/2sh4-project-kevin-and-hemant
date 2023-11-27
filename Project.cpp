@@ -78,10 +78,10 @@ void RunLogic(void)
 void DrawScreen(void)
 {
     MacUILib_clearScreen();    
-    
+    objPosArrayList* playerBody = myPlayer->getPlayerPosList() ;
     objPos tempPos; //creating a tempPos object for player
     objPos tempFood; //creating tempFood object for the food
-    myPlayer->getHeadElement(tempPos); // Look at tut video and change
+    playerBody->getHeadElement(tempPos); // Look at tut video and change
     //for testing click 'k' to generate a random food
     if(myGM->getInput() == 'k')
     {
@@ -90,7 +90,6 @@ void DrawScreen(void)
     myFood->getFoodPos(tempFood);
     bool drawn;
     objPos tempBodySeg;
-    objPosArrayList* playerBody = myPlayer->getPlayerPosList() ;
     for(int i = 0; i <= myGM->getBoardSizeY(); i++)
     {
         for(int j = 0; j <= myGM->getBoardSizeX(); j++)
@@ -113,6 +112,10 @@ void DrawScreen(void)
             if(i == 0 || i == myGM->getBoardSizeY() || j == 0 || j == myGM->getBoardSizeX())
             {
                 MacUILib_printf("#");
+            }
+            else if(tempFood.y == i && tempFood.x == j)
+            {
+                MacUILib_printf("%c", tempFood.symbol);
             }
             else
             {
