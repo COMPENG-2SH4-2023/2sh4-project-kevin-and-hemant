@@ -1,5 +1,6 @@
 #ifndef FOOD_H
 #define FOOD_H
+#define numFoods 5
 
 #include <cstdlib>
 #include <time.h>
@@ -18,6 +19,8 @@ class Food
     private:
     objPos foodPos;
     GameMechs* foodGameMechsRef;
+    int rangex[numFoods];
+    int rangey[numFoods];
         
     public:
     Food();
