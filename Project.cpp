@@ -6,6 +6,8 @@
 #include "Food.h"
 #include "objPosArrayList.h"
 
+// super food 1 = increase snake length by 5 and increase score by 10
+// super food 2 = decrease snake length by 2
 
 using namespace std;
 
@@ -126,6 +128,12 @@ void DrawScreen(void)
     MacUILib_printf("Score: %d\n", myGM->getScore());
     MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
     MacUILib_printf("Food: <%d,%d> + %c", tempFood.x, tempFood.y, tempFood.symbol);
+
+    if(myGM->getLoseFlagStatus())
+    {
+        MacUILib_printf("\n\nYou Lost :( ");
+    }
+
     myGM->clearInput();
 
     
@@ -140,7 +148,7 @@ void LoopDelay(void)
 
 void CleanUp(void)
 {
-    MacUILib_clearScreen();    
+    //MacUILib_clearScreen();    
   
     MacUILib_uninit();
     

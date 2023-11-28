@@ -6,10 +6,7 @@
 #include <time.h>
 
 #include "GameMechs.h"
-
-//MAY include these 2 below...
-//#include "objPos.h"
-//#include "objPosArrayList.h"
+#include "objPosArrayList.h"
 
 using namespace std;
 
@@ -17,14 +14,14 @@ class Food
 {
  
     private:
-    objPos foodPos;
+    objPosArrayList *foodPosList;
     GameMechs* foodGameMechsRef;
         
     public:
     Food(GameMechs* foodGMRef);
     ~Food();
     void generateFood(objPosArrayList &blockOff);
-    void getFoodPos(objPos &returnPos);
+    objPosArrayList* getFoodPos();
 
 
 };
