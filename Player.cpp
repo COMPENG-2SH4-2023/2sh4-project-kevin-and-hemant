@@ -1,8 +1,9 @@
 #include "Player.h"
 
-Player::Player(GameMechs* thisGMRef)
+Player::Player(GameMechs* thisGMRef, Food* thisFoodRef) 
 {
     mainGameMechsRef = thisGMRef;
+    mainFoodRef = thisFoodRef;
     myDir = STOP;
 
     // more actions to be included
@@ -11,16 +12,6 @@ Player::Player(GameMechs* thisGMRef)
                       mainGameMechsRef->getBoardSizeY() / 2,
                       '@');
     playerPosList = new objPosArrayList;
-    playerPosList->insertHead(tempPos);
-
-    // For debugging purpose insert 4 more segemts
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
-    playerPosList->insertHead(tempPos);
     playerPosList->insertHead(tempPos);
 }
 
@@ -66,6 +57,8 @@ void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
     objPos currentHead; 
+    objPos tempFood;
+    objPos tempBodySeg;
     playerPosList->getHeadElement(currentHead);
 
     switch(myDir){
@@ -96,6 +89,26 @@ void Player::movePlayer()
     // New current Head should be inserted in to the head of the list
     // then remove the tail
     playerPosList->insertHead(currentHead);
-    playerPosList->removeTail();
+
+    mainFoodRef->getFoodPos(tempFood);
+    if(currentHead.isPosEqual(&tempFood) == false)
+    {
+        playerPosList->removeTail();
+    }
+    else
+    {
+        mainGameMechsRef->incrementScore();
+        mainFoodRef->generateFood(currentHead);
+    }
+
+    for(int i = 1; i < playerPosList->getSize(); i++){
+        playerPosList->getElement(tempBodySeg, i);
+        if(currentHead.isPosEqual(&tempBodySeg))
+        {
+            mainGameMechsRef->setExitTrue();
+            mainGameMechsRef->setLoseFlag();
+            break;
+        }
+    }
 }
 

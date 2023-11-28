@@ -21,11 +21,11 @@ void Food::generateFood(objPos blockOff)
     
     while(true)
     {
-        int x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
-        int y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
+        foodPos.x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
+        foodPos.y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
         if(!foodPos.isPosEqual(&blockOff))
         {
-            foodPos.setObjPos(x,y,foodChar);
+            //foodPos.setObjPos(x,y,foodChar);
             break;
         }
     }
