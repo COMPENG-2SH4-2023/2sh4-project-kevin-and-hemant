@@ -1,5 +1,5 @@
 #include "Food.h"
-#define foodChar '?'
+#define foodChar 'a'
 
 Food::Food(GameMechs* foodGMRef)
 {
@@ -11,22 +11,28 @@ Food::~Food()
 {
     //delete heap members
 }
-void Food::generateFood(objPos blockOff)
+void Food::generateFood(objPosArrayList &blockOff)
 {
 // generate random x and y coord, and make sure they are NOT boarder or blockoff pos. boardSizex / V.
 // check x and y against 0 and boardSizeX / Y.
 // remember, in objPos class you have an IsPosEqual() method. Use this instead of comparing element-by-element
 // for yoru convenience.
+    bool isFoodGood = false;
+    objPos tempBodySeg;
     srand(time(NULL));
-    
-    while(true)
+    while(!isFoodGood)
     {
-        int x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
-        int y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
-        if(!foodPos.isPosEqual(&blockOff))
+        foodPos.x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
+        foodPos.y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
+        isFoodGood = true;
+        for(int i = 0; i < blockOff.getSize(); i++)
         {
-            foodPos.setObjPos(x,y,foodChar);
-            break;
+            blockOff.getElement(tempBodySeg, i);
+            if(foodPos.isPosEqual(&tempBodySeg))
+            {
+                isFoodGood = false;
+                break;
+            }
         }
     }
 }

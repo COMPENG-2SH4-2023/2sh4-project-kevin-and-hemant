@@ -98,7 +98,7 @@ void Player::movePlayer()
     else
     {
         mainGameMechsRef->incrementScore();
-        mainFoodRef->generateFood(currentHead);
+        mainFoodRef->generateFood(*playerPosList);
     }
 
     for(int i = 1; i < playerPosList->getSize(); i++){

@@ -50,6 +50,7 @@ void Initialize(void)
     myGM = new GameMechs(26,13); //creates board size 26x13
     myFood = new Food(myGM);
     myPlayer = new Player(myGM, myFood);
+    myFood->generateFood(*(myPlayer->getPlayerPosList()));
     // Think about when to generate the new food... 
     // Think about whether you want to set up a debug key to call the food generation routine for verification
     // remember, "myFood->generateFood(objPos blockOff)" requires player reference. You will need to provide it AFTER player object is instantiated.
@@ -83,11 +84,6 @@ void DrawScreen(void)
     objPos tempPos; //creating a tempPos object for player
     objPos tempFood; //creating tempFood object for the food
     playerBody->getHeadElement(tempPos); // Look at tut video and change
-    //for testing click 'k' to generate a random food
-    if(myGM->getInput() == 'k')
-    {
-        myFood->generateFood(tempPos);
-    }
     myFood->getFoodPos(tempFood);
     bool drawn;
     objPos tempBodySeg;
