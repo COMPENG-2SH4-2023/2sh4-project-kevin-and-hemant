@@ -15,6 +15,9 @@ GameMechs* myGM;
 Player* myPlayer;
 Food* myFood;
 
+// super food 1 (S1) = increase snake length by 5 and increase score by 10
+// super food 2 (S2) = decrease snake length by 2
+
 void Initialize(void);
 void GetInput(void);
 void RunLogic(void);
