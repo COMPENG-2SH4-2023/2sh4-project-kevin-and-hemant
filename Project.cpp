@@ -16,17 +16,12 @@ Player* myPlayer;
 Food* myFood;
 bool cheats;
 
-// super food 1 = increase snake length by 1 and increase score by 10
-// super food 2 = decrease snake length by 2 and increase score by 1
-
 void Initialize(void);
 void GetInput(void);
 void RunLogic(void);
 void DrawScreen(void);
 void LoopDelay(void);
 void CleanUp(void);
-
-
 
 int main(void)
 {
@@ -96,12 +91,15 @@ void DrawScreen(void)
     objPosArrayList* playerBody = myPlayer->getPlayerPosList(); //creating a and storing playerBody object with the players positions
     objPosArrayList* tempFoodList = myFood->getFoodPosList(); //creating a and storing tempFoodList object with the random foods spawining
     objPos tempBodySeg;
-
+    
+    //major nested for loops to print the game board, snake, and foods accordingly
     for(int i = 0; i <= myGM->getBoardSizeY(); i++)
     {
         for(int j = 0; j <= myGM->getBoardSizeX(); j++)
         {
             drawn = false;
+
+            //for loop that displays the snake body in each coordinate on the board
             for(int k = 0; k < playerBody->getSize(); k++)
             {
                 playerBody->getElement(tempBodySeg, k);
@@ -113,8 +111,9 @@ void DrawScreen(void)
                 }
             }
 
-            if(drawn) continue;
+            if(drawn) continue; // If player body was drawn, dont draw anything after
 
+            //for loop that displays the generated foods at their coordinates on the board
             for(int k = 0; k < tempFoodList->getSize(); k++)
             {
                 tempFoodList->getElement(tempBodySeg, k);
@@ -126,9 +125,9 @@ void DrawScreen(void)
                 }
             }
 
-            if(drawn) continue; // If player body was drawn, dont draw anything after
+            if(drawn) continue;
 
-            // draw the border
+            // draws the border of the board
             if(i == 0 || i == myGM->getBoardSizeY() || j == 0 || j == myGM->getBoardSizeX())
             {
                 MacUILib_printf("#");
@@ -141,9 +140,9 @@ void DrawScreen(void)
         MacUILib_printf("\n");
     }
     playerBody->getHeadElement(tempBodySeg);
-
-    //maybe display while on STOP???
-    MacUILib_printf("There are 2 special foods in disguise, \nOne makes you shorter by 2 units, \nThe other adds 10 to score!\n");
+    
+    //messages printed under the game board to explain special foods, cheats, board size, player position, score and length of snake
+    MacUILib_printf("There are 2 special foods in disguise, \nOne makes you shorter by 2 units, \nThe other adds 10 to score!\n\n");
     MacUILib_printf("Press c to show where the special foods are\n");
 
     MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
@@ -159,15 +158,11 @@ void DrawScreen(void)
             tempFoodList->getElement(tempBodySeg, k);
             if(k == 0)
             {
-                MacUILib_printf("Super Food 1, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
+                MacUILib_printf("\nSuper Food 1, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
             }
             else if(k == 1)
             {
                 MacUILib_printf("Super Food 2, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
-            }
-            else
-            {
-                MacUILib_printf("Regular Food, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
             }
         }
     }
@@ -187,9 +182,7 @@ void LoopDelay(void)
 
 
 void CleanUp(void)
-{
-    //MacUILib_clearScreen();    
-  
+{  
     MacUILib_uninit();
     
     //remove heap instances
