@@ -15,8 +15,8 @@ GameMechs* myGM;
 Player* myPlayer;
 Food* myFood;
 
-// super food 1 (S1) = increase snake length by 5 and increase score by 10
-// super food 2 (S2) = decrease snake length by 2
+// super food 1 (S1) = increase snake length by 1 and increase score by 5
+// super food 2 (S2) = increase snake length by 0 and increase score by 1
 
 void Initialize(void);
 void GetInput(void);
@@ -83,11 +83,11 @@ void DrawScreen(void)
 {
     MacUILib_clearScreen(); 
     
-    objPosArrayList* playerBody = myPlayer->getPlayerPosList() ;
+    objPosArrayList* playerBody = myPlayer->getPlayerPosList();
+    objPosArrayList* tempFoodList;
     objPos tempPos; //creating a tempPos object for player
-    objPos tempFood; //creating tempFood object for the food
-    playerBody->getHeadElement(tempPos); // Look at tut video and change
-    myFood->getFoodPos(tempFood);
+    //playerBody->getHeadElement(tempPos); // Look at tut video and change
+    tempFoodList = myFood->getFoodPosList();
     bool drawn;
     objPos tempBodySeg;
     for(int i = 0; i <= myGM->getBoardSizeY(); i++)
@@ -106,16 +106,25 @@ void DrawScreen(void)
                 }
             }
 
+            if(drawn) continue;
+
+            for(int k = 0; k < tempFoodList->getSize(); k++)
+            {
+                tempFoodList->getElement(tempBodySeg, k);
+                if(tempBodySeg.x == j && tempBodySeg.y == i)
+                {
+                    MacUILib_printf("%c", tempBodySeg.symbol);
+                    drawn = true;
+                    break;
+                }
+            }
+
             if(drawn) continue; // If player body was drawn, dont draw anything after
 
             // draw the border
             if(i == 0 || i == myGM->getBoardSizeY() || j == 0 || j == myGM->getBoardSizeX())
             {
                 MacUILib_printf("#");
-            }
-            else if(tempFood.y == i && tempFood.x == j)
-            {
-                MacUILib_printf("%c", tempFood.symbol);
             }
             else
             {
@@ -127,9 +136,15 @@ void DrawScreen(void)
 
     playerBody->getHeadElement(tempBodySeg);
     MacUILib_printf("Score: %d\n", myGM->getScore());
-    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
-    MacUILib_printf("Food: <%d,%d> + %c", tempFood.x, tempFood.y, tempFood.symbol);
+    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), playerBody->getSize(), tempBodySeg.y, tempBodySeg.symbol);
+    //MacUILib_printf("Food: <%d,%d> + %c", tempFood.x, tempFood.y, tempFood.symbol);
     myGM->clearInput();
+
+    for(int k = 0; k < tempFoodList->getSize(); k++)
+        {
+            tempFoodList->getElement(tempBodySeg, k);
+            MacUILib_printf("%c %d %d \n", tempBodySeg.symbol, tempBodySeg.x, tempBodySeg.y);
+        }
 
     
     

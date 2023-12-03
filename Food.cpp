@@ -1,44 +1,76 @@
 #include "Food.h"
+#include "objPosArrayList.h"
 #define foodChar 'a'
 
 Food::Food(GameMechs* foodGMRef)
 {
+    objPos tempPos;
+
     foodGameMechsRef = foodGMRef;
-    foodPos.setObjPos(-1,-1,foodChar);
+
+    tempPos.setObjPos(-1,-1,'a');
+    foodPosList = new objPosArrayList;
+    foodPosList->insertTail(tempPos);
+    foodPosList->insertTail(tempPos);
+    foodPosList->insertTail(tempPos);
+    tempPos.setObjPos(-1,-1,'b');
+    foodPosList->insertTail(tempPos);
+    tempPos.setObjPos(-1,-1,'c');
+    foodPosList->insertTail(tempPos);
 }
 
 Food::~Food()
 {
-    //delete heap members
+    delete foodPosList;
 }
+
+
 void Food::generateFood(objPosArrayList &blockOff)
 {
 // generate random x and y coord, and make sure they are NOT boarder or blockoff pos. boardSizex / V.
 // check x and y against 0 and boardSizeX / Y.
 // remember, in objPos class you have an IsPosEqual() method. Use this instead of comparing element-by-element
 // for yoru convenience.
-    bool isFoodGood = false;
     objPos tempBodySeg;
+    objPos foodPos;
     srand(time(NULL));
-    while(!isFoodGood)
+
+    for(int j = 0; j < foodPosList->getSize(); j++)
     {
-        foodPos.x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
-        foodPos.y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
-        isFoodGood = true;
-        for(int i = 0; i < blockOff.getSize(); i++)
+        foodPosList->removeTail();
+        bool isFoodGood = false;
+        while(!isFoodGood)
         {
-            blockOff.getElement(tempBodySeg, i);
-            if(foodPos.isPosEqual(&tempBodySeg))
+            foodPos.x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
+            foodPos.y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
+            foodPos.symbol = foodChar;
+            isFoodGood = true;
+            for(int i = 0; i < blockOff.getSize(); i++)
             {
-                isFoodGood = false;
-                break;
+                blockOff.getElement(tempBodySeg, i);
+                if(foodPos.isPosEqual(&tempBodySeg))
+                {
+                    isFoodGood = false;
+                    break;
+                }
+            }
+            for(int i = 0; i < foodPosList->getSize(); i++)
+            {
+                foodPosList->getElement(tempBodySeg, i);
+                if(foodPos.isPosEqual(&tempBodySeg))
+                {
+                    isFoodGood = false;
+                    break;
+                }
             }
         }
+        foodPosList->insertHead(foodPos);
     }
 }
 
 
-void Food::getFoodPos(objPos &returnPos)
+
+objPosArrayList* Food::getFoodPosList()
 {
-    returnPos.setObjPos(foodPos);
+    return foodPosList;
 }

@@ -15,18 +15,15 @@ using namespace std;
 
 class Food
 {
- 
     private:
-    objPos foodPos;
-    GameMechs* foodGameMechsRef;
+        objPosArrayList* foodPosList;
+        GameMechs* foodGameMechsRef;
         
     public:
-    Food(GameMechs* foodGMRef);
-    ~Food();
-    void generateFood(objPosArrayList &blockOff);
-    void getFoodPos(objPos &returnPos);
-
-
+        Food(GameMechs* foodGMRef);
+        ~Food();
+        void generateFood(objPosArrayList &blockOff);
+        objPosArrayList* getFoodPosList();
 };
 
 #endif

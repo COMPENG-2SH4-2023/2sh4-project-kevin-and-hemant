@@ -56,8 +56,9 @@ void Player::updatePlayerDir()
 void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
+    int i;
     objPos currentHead; 
-    objPos tempFood;
+    objPosArrayList* tempFoodList;
     objPos tempBodySeg;
     playerPosList->getHeadElement(currentHead);
 
@@ -90,18 +91,40 @@ void Player::movePlayer()
     // then remove the tail
     playerPosList->insertHead(currentHead);
 
-    mainFoodRef->getFoodPos(tempFood);
-    if(currentHead.isPosEqual(&tempFood) == false)
+    tempFoodList = mainFoodRef->getFoodPosList();
+    
+    for(i = 0; i < tempFoodList->getSize(); i++)
+    {
+        tempFoodList->getElement(tempBodySeg, i);
+        if(currentHead.isPosEqual(&tempBodySeg) == true)
+        {
+            mainGameMechsRef->incrementScore();
+            mainFoodRef->generateFood(*playerPosList);
+
+            if(i == 0 && playerPosList->getSize() > 3)
+            {
+                playerPosList->removeTail();
+                playerPosList->removeTail();
+                playerPosList->removeTail();
+            }
+            else if(i == 1)
+            {
+                for(int h = 0; h < 9; h++)
+                {
+                    mainGameMechsRef->incrementScore();
+                }
+            }
+            break;
+        }
+    }
+
+    if(i == 5)
     {
         playerPosList->removeTail();
     }
-    else
-    {
-        mainGameMechsRef->incrementScore();
-        mainFoodRef->generateFood(*playerPosList);
-    }
 
-    for(int i = 1; i < playerPosList->getSize(); i++){
+    for(i = 1; i < playerPosList->getSize(); i++)
+    {
         playerPosList->getElement(tempBodySeg, i);
         if(currentHead.isPosEqual(&tempBodySeg))
         {
