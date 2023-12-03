@@ -15,8 +15,8 @@ GameMechs* myGM;
 Player* myPlayer;
 Food* myFood;
 
-// super food 1 (S1) = increase snake length by 5 and increase score by 10
-// super food 2 (S2) = decrease snake length by 2
+// super food 1 = increase snake length by 1 and increase score by 10
+// super food 2 = decrease snake length by 2 and increase score by 1
 
 void Initialize(void);
 void GetInput(void);
@@ -32,6 +32,7 @@ int main(void)
 
     Initialize();
 
+    //the essential game functions are looped while the exit flag is false
     while(myGM->getExitFlagStatus() == false)  
     {
         GetInput();
@@ -54,20 +55,22 @@ void Initialize(void)
     myFood = new Food(myGM);
     myPlayer = new Player(myGM, myFood);
     myFood->generateFood(*(myPlayer->getPlayerPosList()));
-    // Think about when to generate the new food... 
-    // Think about whether you want to set up a debug key to call the food generation routine for verification
-    // remember, "myFood->generateFood(objPos blockOff)" requires player reference. You will need to provide it AFTER player object is instantiated.
 }
 
 void GetInput(void)
 {
     if(MacUILib_hasChar() == 1)
     {
+        //stores the input of the userd
         char input = MacUILib_getChar();
+
+        //if space (32) is clicked  exit flag is set to true
         if(input == 32)
         {
-            myGM->setExitTrue();
+            myGM->setExitTrue(); 
         }
+
+        //sets the input in game mechanics
         myGM->setInput(input);
     }
 }
@@ -76,20 +79,18 @@ void RunLogic(void)
 {
     myPlayer->updatePlayerDir();
     myPlayer->movePlayer();
-    //clear input was here (moved to last line in draw for now)
 }
 
 void DrawScreen(void)
 {
     MacUILib_clearScreen(); 
     
-    objPosArrayList* playerBody = myPlayer->getPlayerPosList() ;
-    objPos tempPos; //creating a tempPos object for player
-    objPos tempFood; //creating tempFood object for the food
-    playerBody->getHeadElement(tempPos); // Look at tut video and change
-    myFood->getFoodPos(tempFood);
     bool drawn;
+    objPos tempPos; //creating a tempPos object for player
+    objPosArrayList* playerBody = myPlayer->getPlayerPosList(); //creating a and storing playerBody object with the players positions
+    objPosArrayList* tempFoodList = myFood->getFoodPosList(); //creating a and storing tempFoodList object with the random foods spawining
     objPos tempBodySeg;
+
     for(int i = 0; i <= myGM->getBoardSizeY(); i++)
     {
         for(int j = 0; j <= myGM->getBoardSizeX(); j++)
@@ -106,16 +107,25 @@ void DrawScreen(void)
                 }
             }
 
+            if(drawn) continue;
+
+            for(int k = 0; k < tempFoodList->getSize(); k++)
+            {
+                tempFoodList->getElement(tempBodySeg, k);
+                if(tempBodySeg.x == j && tempBodySeg.y == i)
+                {
+                    MacUILib_printf("%c", tempBodySeg.symbol);
+                    drawn = true;
+                    break;
+                }
+            }
+
             if(drawn) continue; // If player body was drawn, dont draw anything after
 
             // draw the border
             if(i == 0 || i == myGM->getBoardSizeY() || j == 0 || j == myGM->getBoardSizeX())
             {
                 MacUILib_printf("#");
-            }
-            else if(tempFood.y == i && tempFood.x == j)
-            {
-                MacUILib_printf("%c", tempFood.symbol);
             }
             else
             {
@@ -127,16 +137,39 @@ void DrawScreen(void)
 
     playerBody->getHeadElement(tempBodySeg);
     MacUILib_printf("Score: %d\n", myGM->getScore());
-    MacUILib_printf("Board size: %dx%d, Player Heead Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
-    MacUILib_printf("Food: <%d,%d> + %c", tempFood.x, tempFood.y, tempFood.symbol);
-    if(myGM->getLoseFlagStatus())
-    {
-        MacUILib_printf("\n\nGAME OVER\nYou Lost :( \n");
-    }
-    myGM->clearInput();
 
+    //maybe display while on STOP???
+    MacUILib_printf("There are 2 special foods in disguise, \nOne makes you shorter by 2 units, \nThe other adds 10 to score!\n");
+    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
+    MacUILib_printf("Snake length: %d\n", playerBody->getSize());
     
+    /*
+    Trying to make a cheat bool so when a certain key is clicked the user is able to see the locations of special foods
+
+    if(myGM->getInput() == 'l')
+        const cheats = true;
+
+    if(cheats == true)
+    {
+        for(int k = 0; k < tempFoodList->getSize(); k++)
+            {
+                tempFoodList->getElement(tempBodySeg, k);
+                if(k == 0)
+                    MacUILib_printf("Super Food 1, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
+                else if(k == 1)
+                    MacUILib_printf("Super Food 2, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
+                else:
+                    MacUILib_printf("%c %d %d \n", tempBodySeg.symbol, tempBodySeg.x, tempBodySeg.y);
+            }
+    }
+    */
     
+    if(myGM->getLoseFlagStatus() == true)
+    {
+        MacUILib_printf("\nYou Lost! Your score was: %d\n", myGM->getScore());
+    }
+    
+    myGM->clearInput();
 }
 
 void LoopDelay(void)

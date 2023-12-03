@@ -12,18 +12,15 @@ using namespace std;
 
 class Food
 {
- 
     private:
-    objPosArrayList *foodPosList;
-    GameMechs* foodGameMechsRef;
+        objPosArrayList* foodPosList; //object array list to store the diifferent foods
+        GameMechs* foodGameMechsRef; //passing in game mechanics
         
     public:
-    Food(GameMechs* foodGMRef);
-    ~Food();
-    void generateFood(objPosArrayList &blockOff);
-    objPosArrayList* getFoodPos();
-
-
+        Food(GameMechs* foodGMRef); //constructor 
+        ~Food(); //deconstructor
+        void generateFood(objPosArrayList &blockOff); //method to generate foods
+        objPosArrayList* getFoodPosList(); //method that returns the positions of all the foods
 };
 
 #endif
