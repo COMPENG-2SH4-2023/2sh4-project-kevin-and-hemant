@@ -140,14 +140,15 @@ void DrawScreen(void)
         }
         MacUILib_printf("\n");
     }
-
     playerBody->getHeadElement(tempBodySeg);
-    MacUILib_printf("Score: %d\n", myGM->getScore());
 
     //maybe display while on STOP???
     MacUILib_printf("There are 2 special foods in disguise, \nOne makes you shorter by 2 units, \nThe other adds 10 to score!\n");
     MacUILib_printf("Press c to show where the special foods are\n");
-    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
+
+    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
+    
+    MacUILib_printf("Score: %d\n", myGM->getScore());
     MacUILib_printf("Snake length: %d\n", playerBody->getSize());
     
     // If cheats are enabled print the locations for all of the food
