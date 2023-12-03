@@ -57,7 +57,7 @@ void Player::movePlayer()
 {
     // PPA3 Finite State Machine logic
     objPos currentHead; 
-    objPos tempFood;
+    objPosArrayList tempFood;
     objPos tempBodySeg;
     playerPosList->getHeadElement(currentHead);
 
@@ -90,7 +90,7 @@ void Player::movePlayer()
     // then remove the tail
     playerPosList->insertHead(currentHead);
 
-    mainFoodRef->getFoodPos(tempFood);
+    mainFoodRef->getFoodPos();
     if(currentHead.isPosEqual(&tempFood) == false)
     {
         playerPosList->removeTail();
@@ -111,4 +111,3 @@ void Player::movePlayer()
         }
     }
 }
-

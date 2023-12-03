@@ -1,35 +1,64 @@
 #include "Food.h"
 #define foodChar 'a'
+#define foodCharS1 'b'
+#define foodCharS2 'c'
 
 Food::Food(GameMechs* foodGMRef)
 {
     foodGameMechsRef = foodGMRef;
+    objPos tempPos;
+    tempPos.setObjPos(-1,-1,foodChar);
+
     foodPosList = new objPosArrayList();
-    objPos tempFood
-    foodPosList.insertTail();
-    //foodPos.setObjPos(-1,-1,foodChar);
+    foodPosList->insertTail(tempPos);
 }
 
 Food::~Food()
 {
-    //delete heap members
+    delete foodPosList; //delete heap members
 }
-void Food::generateFood(objPos blockOff)
+
+void Food::generateFood(objPosArrayList &blockOff)
 {
 // generate random x and y coord, and make sure they are NOT boarder or blockoff pos. boardSizex / V.
 // check x and y against 0 and boardSizeX / Y.
 // remember, in objPos class you have an IsPosEqual() method. Use this instead of comparing element-by-element
 // for yoru convenience.
+    bool isFoodGood = false;
+    int i, x, y;
+    objPos tempBodySeg;
+    objPos tempFoodSeg;
     srand(time(NULL));
-    
-    while(true)
+    while(!isFoodGood)
     {
-        int x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
-        int y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
-        if(!foodPos.isPosEqual(&blockOff))
+        for(i = 0; i < 5; i++)
         {
-            foodPos.setObjPos(x,y,foodChar);
-            break;
+            x = (rand() % (foodGameMechsRef->getBoardSizeX()-2)) + 1;
+            y = (rand() % (foodGameMechsRef->getBoardSizeY()-2)) + 1;
+            if(i == 3)
+            {
+                tempFoodSeg.setObjPos(x,y,foodCharS1);
+            }
+            else if(i == 4)
+            {
+                tempFoodSeg.setObjPos(x,y,foodCharS2);
+            }
+            else
+            {
+                tempFoodSeg.setObjPos(x,y,foodChar);
+            }
+            foodPosList->insertTail(tempFoodSeg);
+
+        }
+        isFoodGood = true;
+        for(i = 0; i < blockOff.getSize(); i++)
+        {
+            blockOff.getElement(tempBodySeg, i);
+            if(tempBodySeg.isPosEqual(&tempBodySeg))
+            {
+                isFoodGood = false;
+                break;
+            }
         }
     }
 }
