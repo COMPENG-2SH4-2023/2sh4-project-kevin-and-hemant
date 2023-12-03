@@ -8,9 +8,9 @@ Food::Food(GameMechs* foodGMRef)
 
     foodGameMechsRef = foodGMRef; //creates a useable game mechanics object to be used
 
-    //inti
+    //intializes the array list of foods to be generated
     tempPos.setObjPos(-1,-1,foodChar);
-    foodPosList = new objPosArrayList;
+    foodPosList = new objPosArrayList; //creates the food position list on the heap
     foodPosList->insertTail(tempPos);
     foodPosList->insertTail(tempPos);
     foodPosList->insertTail(tempPos);
@@ -23,17 +23,15 @@ Food::~Food()
     delete foodPosList;
 }
 
-
 void Food::generateFood(objPosArrayList &blockOff)
 {
-// generate random x and y coord, and make sure they are NOT boarder or blockoff pos. boardSizex / Y.
-// check x and y against 0 and boardSizeX / Y.
-// remember, in objPos class you have an IsPosEqual() method. Use this instead of comparing element-by-element
-// for convenience.
     objPos tempBodySeg;
     objPos foodPos;
     srand(time(NULL));
 
+    //for loop generates certain number of foods by removing the tail and adding a head to the array list
+    //randomly generated X and Y coordinates for foods and stores it in array list of foods
+    //also checks if the food generated is on the snake body if so make new food
     for(int j = 0; j < foodPosList->getSize(); j++)
     {
         foodPosList->removeTail();
@@ -66,8 +64,6 @@ void Food::generateFood(objPosArrayList &blockOff)
         foodPosList->insertHead(foodPos);
     }
 }
-
-
 
 objPosArrayList* Food::getFoodPosList()
 {

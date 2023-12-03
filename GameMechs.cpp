@@ -1,27 +1,27 @@
 #include "GameMechs.h"
-//#include "MacUILib.h" MAYBE ASK SCOTT
 
 GameMechs::GameMechs()
 {
+    //sets all the private data members to their default value
     input = 0;
+    score = 0;
     exitFlag = false;
     loseFlag = false;
-    score = 0;
     boardSizeX = 30;
     boardSizeY = 15;
 }
 
 GameMechs::GameMechs(int boardX, int boardY)
 {
+    //sets some private data members to their default value and sets a specific board size
     input = 0;
+    score = 0;
     exitFlag = false;
     loseFlag = false;
-    score = 0;
     boardSizeX = boardX;
     boardSizeY = boardY;
 }
 
-// do you need a destructor?
 GameMechs::~GameMechs()
 {
     //delete heap members
@@ -47,7 +47,6 @@ int GameMechs::getBoardSizeY()
     return boardSizeY;
 }
 
-
 void GameMechs::setExitTrue()
 {
     exitFlag = true;
@@ -66,7 +65,6 @@ void GameMechs::clearInput()
 void GameMechs::setLoseFlag()
 {
     loseFlag = true;
-    //maybe display you lose/ate yourslef?
 }
 
 bool GameMechs::getLoseFlagStatus()

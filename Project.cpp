@@ -14,6 +14,7 @@ using namespace std;
 GameMechs* myGM;
 Player* myPlayer;
 Food* myFood;
+bool cheats;
 
 // super food 1 = increase snake length by 1 and increase score by 10
 // super food 2 = decrease snake length by 2 and increase score by 1
@@ -55,6 +56,7 @@ void Initialize(void)
     myFood = new Food(myGM);
     myPlayer = new Player(myGM, myFood);
     myFood->generateFood(*(myPlayer->getPlayerPosList()));
+    cheats = false;
 }
 
 void GetInput(void)
@@ -69,7 +71,11 @@ void GetInput(void)
         {
             myGM->setExitTrue(); 
         }
-
+        // If c is clicked enable cheats 
+        if(input == 'c')
+        { 
+            cheats = true;
+        }
         //sets the input in game mechanics
         myGM->setInput(input);
     }
@@ -136,33 +142,30 @@ void DrawScreen(void)
     }
 
     playerBody->getHeadElement(tempBodySeg);
-    MacUILib_printf("Score: %d\n", myGM->getScore());
 
     //maybe display while on STOP???
     MacUILib_printf("There are 2 special foods in disguise, \nOne makes you shorter by 2 units, \nThe other adds 10 to score!\n");
-    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
+    MacUILib_printf("Press c to show where the special foods are\n\n");
+    MacUILib_printf("Score: %d\n", myGM->getScore());
     MacUILib_printf("Snake length: %d\n", playerBody->getSize());
+    MacUILib_printf("Board size: %dx%d, Player Position: <%d,%d> + %c\n", myGM->getBoardSizeX(), myGM->getBoardSizeY(), tempBodySeg.x, tempBodySeg.y, tempBodySeg.symbol);
     
-    /*
-    Trying to make a cheat bool so when a certain key is clicked the user is able to see the locations of special foods
-
-    if(myGM->getInput() == 'l')
-        const cheats = true;
-
+    // If cheats are enabled print the locations for all of the food
     if(cheats == true)
     {
         for(int k = 0; k < tempFoodList->getSize(); k++)
+        {
+            tempFoodList->getElement(tempBodySeg, k);
+            if(k == 0)
             {
-                tempFoodList->getElement(tempBodySeg, k);
-                if(k == 0)
-                    MacUILib_printf("Super Food 1, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
-                else if(k == 1)
-                    MacUILib_printf("Super Food 2, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
-                else:
-                    MacUILib_printf("%c %d %d \n", tempBodySeg.symbol, tempBodySeg.x, tempBodySeg.y);
+                MacUILib_printf("Super Food 1, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
             }
+            else if(k == 1)
+            {
+                MacUILib_printf("Super Food 2, <%d,%d> \n", tempBodySeg.x, tempBodySeg.y);
+            }
+        }
     }
-    */
     
     if(myGM->getLoseFlagStatus() == true)
     {

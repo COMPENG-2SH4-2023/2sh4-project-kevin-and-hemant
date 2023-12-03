@@ -1,6 +1,5 @@
 #ifndef FOOD_H
 #define FOOD_H
-#define numFoods 5
 
 #include <cstdlib>
 #include <time.h>
@@ -22,5 +21,4 @@ class Food
         void generateFood(objPosArrayList &blockOff); //method to generate foods
         objPosArrayList* getFoodPosList(); //method that returns the positions of all the foods
 };
-
 #endif
