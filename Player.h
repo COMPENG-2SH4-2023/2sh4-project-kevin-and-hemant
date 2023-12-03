@@ -22,12 +22,12 @@ class Player
         Player(GameMechs* thisGMRef, Food* thisFoodRef);
         ~Player();
 
-        objPosArrayList* getPlayerPosList(); // Upgrade this in iteration 3.
+        objPosArrayList* getPlayerPosList(); 
         void updatePlayerDir();
         void movePlayer();
 
     private:
-        objPosArrayList *playerPosList;   // Upgrade this in iteration 3.       
+        objPosArrayList *playerPosList;       
         enum Dir myDir;
 
         // Need a reference to the Main Game Mechanisms
